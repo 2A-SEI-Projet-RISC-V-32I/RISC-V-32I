@@ -65,28 +65,37 @@ always @* begin
         end
         `OP_BRANCH: begin // Branch Instructions
             o_branch = 1;
-                // TODO
-                //
-                //  case (funct_3)
-                //    `BRANCH_BEQ:    o_branch_op = `BRANCH_BEQ;
-                //     ..
+            o_reg_write = 0;
+            o_alu_src_a = 0;
+            o_alu_src_b = 0;
+            case (funct_3)
+                3'b000 : o_branch_op = `BRANCH_BEQ;
+                3'b001 : o_branch_op = `BRANCH_BNE;
+                3'b100 : o_branch_op = `BRANCH_BLT;
+                3'b101 : o_branch_op = `BRANCH_BGE;
+                3'b110 : o_branch_op = `BRANCH_BLTU;
+                3'b111 : o_branch_op = `BRANCH_BGEU;
+            endcase
         end
         `OP_LOAD: begin // Load Instructions
             o_reg_write = 1;
-                // TODO
+            o_alu_src_b = 1;
+            o_result_mux = 2'b10;
         end
         `OP_STORE: begin // Store Instructions
-                // TODO
+            o_reg_write = 0;
+            o_mem_write = 1;
+            o_alu_src_b = 1;
         end
         `OP_ALU: begin // ALU Instructions
             o_reg_write = 1;
             case (funct_3)
                 3'b000: begin
-                        	if (i_inst[30]) 
-                            	o_alu_op = `OP_ALU_SUB;
-                        	else 
-                            o_alu_op = `OP_ALU_ADD;
-                    	end
+                    if (i_inst[30]) 
+                        o_alu_op = `OP_ALU_SUB;
+                    else 
+                        o_alu_op = `OP_ALU_ADD;
+                end
                 3'b111: o_alu_op = `OP_ALU_AND;
                 3'b110: o_alu_op = `OP_ALU_OR;                    
                 3'b100: o_alu_op = `OP_ALU_XOR;
@@ -94,16 +103,33 @@ always @* begin
                 3'b011: o_alu_op = `OP_ALU_SLTU;
                 3'b001: o_alu_op = `OP_ALU_SLL;                    
                 3'b101: begin 
-                        	if(i_inst[30])
-                            	o_alu_op = `OP_ALU_SRA;
-                        	else
-                            	o_alu_op = `OP_ALU_SRL;
-                    	end
+                        if(i_inst[30])
+                            o_alu_op = `OP_ALU_SRA;
+                        else
+                            o_alu_op = `OP_ALU_SRL;
+                end
                 default: o_alu_op = `OP_ALU_NOP;
             endcase
         end
         `OP_ALUI: begin	// Implement ADDI, ANDI, ORI, XORI, etc.
-                // TODO
+            o_reg_write = 1;
+            o_alu_src_b = 1; // Utilise l'immédiat
+            case (funct_3)
+                3'b000: o_alu_op = `OP_ALU_ADD;
+                3'b111: o_alu_op = `OP_ALU_AND;
+                3'b110: o_alu_op = `OP_ALU_OR;
+                3'b100: o_alu_op = `OP_ALU_XOR;
+                3'b010: o_alu_op = `OP_ALU_SLT; 
+                3'b011: o_alu_op = `OP_ALU_SLTU;
+                3'b001: o_alu_op = `OP_ALU_SLL; 
+                3'b101: begin 
+                        if(i_inst[30])
+                            o_alu_op = `OP_ALU_SRA;
+                        else
+                            o_alu_op = `OP_ALU_SRL;
+                end
+                default: o_alu_op = `OP_ALU_NOP;
+            endcase
         end
         default: begin
                 // Unrecognized opcode; no action taken
