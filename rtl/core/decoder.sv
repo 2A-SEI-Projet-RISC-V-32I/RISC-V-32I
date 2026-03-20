@@ -81,11 +81,25 @@ always @* begin
             o_reg_write = 1;
             o_alu_src_b = 1;
             o_result_mux = 2'b10;
+            case (funct_3)
+                3'b000: o_alu_op = `OP_ALU_LB;  // Load Byte
+                3'b001: o_alu_op = `OP_ALU_LH;  // Load Half
+                3'b010: o_alu_op = `OP_ALU_LW;  // Load Word
+                3'b100: o_alu_op = `OP_ALU_LBU; // Load Byte Unsigned
+                3'b101: o_alu_op = `OP_ALU_LHU; // Load Half Unsigned
+                default: o_alu_op = `OP_ALU_LW;
+            endcase
         end
         `OP_STORE: begin // Store Instructions
             o_reg_write = 0;
             o_mem_write = 1;
             o_alu_src_b = 1;
+            case (funct_3)
+                3'b000: o_alu_op = `OP_ALU_SB; // Store Byte
+                3'b001: o_alu_op = `OP_ALU_SH; // Store Half
+                3'b010: o_alu_op = `OP_ALU_SW; // Store Word
+                default: o_alu_op = `OP_ALU_SW;
+            endcase
         end
         `OP_ALU: begin // ALU Instructions
             o_reg_write = 1;
