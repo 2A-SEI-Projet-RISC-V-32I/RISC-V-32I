@@ -14,7 +14,19 @@ module instruction_memory #(
 
     reg [`INST_WIDTH-1:0] mem [0:MEM_SIZE-1];
 
-    always @(*) begin
+    initial begin
+        for (i = 0; i < MEM_SIZE; i = i + 1) begin
+            mem[i] = 32'h00000000;
+        end
+
+        mem[0] = 32'h00108113;
+        mem[1] = 32'h00108193;
+        mem[2] = 32'h00310233;
+        mem[3] = 32'hfe218ae3;
+        mem[4] = 32'h00000000;
+    end
+
+    always_comb begin
         inst = mem[addr];
     end
 
