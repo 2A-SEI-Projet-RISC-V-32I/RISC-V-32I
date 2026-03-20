@@ -26,21 +26,23 @@
 `define OP_FENCE   7'b0001111 // Fence
 `define OP_SYSTEM  7'b1110011 // System Instructions (ECALL, EBREAK, etc.)
 
-// RISC-V LOAD 
-`define OP_ALU_LB     6'b110000 // Load Byte
-`define OP_ALU_LH     6'b110001 // Load Half
-`define OP_ALU_LW     6'b110010 // Load Word
-`define OP_ALU_LBU    6'b110011 // Load Byte Unsigned
-`define OP_ALU_LHU    6'b110100 // Load Half Unsigned
+// RISC-V LOAD FUNCT 3
+`define FUNCT_3_ALU_LB 3'b000  // Load Byte
+`define FUNCT_3_ALU_LH 3'b001 // Load Half
+`define FUNCT_3_ALU_LW3 3'b010  // Load Word
+`define FUNCT_3_ALU_LBU 3'b100 // Load Byte Unsigned
+`define FUNCT_3_ALU_LHU 3'b101  // Load Half Unsigned
 
-// RISC-V STORE
-`define OP_ALU_SB     6'b110101 // Store Byte
-`define OP_ALU_SH     6'b110110 // Store Half
-`define OP_ALU_SW     6'b110111 // Store Word
+// RISC-V STORE FUNCT 3
+`define FUNCT_3_ALU_SB 3'b000 // Store Byte
+`define FUNCT_3_ALU_SH 3'b001  // Store Half
+`define FUNCT_3_ALU_SW3'b010 // Store Word
 
 // System Instructions
 `define OP_ALU_ECALL  6'b111000 // System Call
 `define OP_ALU_EBREAK 6'b111001 // Debug Break
+`define OP_ALU_FENCE  6'b111010 
+`define OP_ALU_FENCEI 6'b111011
 
 // RISC-V ALU Operations
 `define OP_ALU_NOP    6'b000000 
