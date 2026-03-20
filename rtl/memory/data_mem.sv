@@ -1,35 +1,80 @@
 `define DATA_WIDTH 32
 
+`define LB  3'b000 // Load Byte
+`define LH  3'b001 // Load Half
+`define LW  3'b010 // Load Word
+`define LBU 3'b100 // Load Byte Unsigned
+`define LHU 3'b101 // Load Half Unsigned
+`define SB  3'b000 // Store Byte
+`define SH  3'b001 // Store Half
+`define SW  3'b010 // Store Word
+
 module data_memory #(
-    parameter MEM_SIZE = 1024 
+    parameter MEM_SIZE = 4096 
 ) (
     input wire i_clk,
     input wire i_we,
-    input wire [3:0] i_be, 
+    input wire [2:0] i_func3, 
     input wire [`DATA_WIDTH-1:0] i_data,
     input wire [$clog2(MEM_SIZE)-1:0] i_addr,
-    output wire [`DATA_WIDTH-1:0] o_data
+    output logic [`DATA_WIDTH-1:0] o_data 
 );
     
-    reg [`DATA_WIDTH-1:0] memory [0:MEM_SIZE-1];
+    reg [7:0] memory [0:MEM_SIZE-1];
     integer i;
 
     initial begin
         for (i = 0; i < MEM_SIZE; i = i + 1) begin
-            memory[i] = 32'h00000000;
+            memory[i] = 8'h00;
         end
     end
 
     always_ff @(posedge i_clk) begin
         if (i_we) begin
-
-            if (i_be[0]) memory[i_addr][7:0]   <= i_data[7:0];
-            if (i_be[1]) memory[i_addr][15:8]  <= i_data[15:8];
-            if (i_be[2]) memory[i_addr][23:16] <= i_data[23:16];
-            if (i_be[3]) memory[i_addr][31:24] <= i_data[31:24];
+            case (i_func3)
+                `SB: begin
+                    memory[i_addr] <= i_data[7:0];
+                end
+                
+                `SH: begin
+                    memory[i_addr]   <= i_data[7:0];
+                    memory[i_addr+1] <= i_data[15:8];
+                end
+                
+                `SW: begin
+                    memory[i_addr]   <= i_data[7:0];
+                    memory[i_addr+1] <= i_data[15:8];
+                    memory[i_addr+2] <= i_data[23:16];
+                    memory[i_addr+3] <= i_data[31:24];
+                end
+            endcase
         end
     end
 
-    assign o_data = memory[i_addr];
+    always_comb begin
 
+        o_data = 32'b0;
+
+        case (i_func3)
+            `LB: begin
+                o_data = { {24{memory[i_addr][7]}}, memory[i_addr] }; 
+            end
+            
+            `LH: begin
+                o_data = { {16{memory[i_addr+1][7]}}, memory[i_addr+1], memory[i_addr] };
+            end
+            
+            `LW: begin
+                o_data = { memory[i_addr+3], memory[i_addr+2], memory[i_addr+1], memory[i_addr] }; 
+            end
+            
+            `LBU: begin
+                o_data = { 24'b0, memory[i_addr] };
+            end
+            
+            `LHU: begin
+                o_data = { 16'b0, memory[i_addr+1], memory[i_addr] };
+            end
+        endcase
+    end
 endmodule
