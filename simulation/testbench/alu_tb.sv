@@ -60,11 +60,31 @@ module  alu_tb;
         i_alu_op = `OP_ALU_SLT;
       #10;
         `assert(dut.o_c, 32'h00000001);
+        i_a = 32'h00010001;
+        i_b = 32'h00000001;
+        i_alu_op = `OP_ALU_SLTU;
+      #10;
+        `assert(dut.o_c, 32'h00000000);
         i_a = 32'h00000001;
         i_b = 32'h00000010;
         i_alu_op = `OP_ALU_SLL;
       #10;
         `assert(dut.o_c, 32'h00010000);
+        i_a = 32'h00000001;
+        i_b = 32'h00000021; // 33 en décimal (32 + 1)
+        i_alu_op = `OP_ALU_SLL;
+      #10;
+       `assert(o_c, 32'h00000002);
+    
+    // Test équivalent pour le décalage à droite (SRL)
+   
+        i_a = 32'h00000004;
+        i_b = 32'h00000022; // 34 en décimal
+        i_alu_op = `OP_ALU_SRL;
+      
+        #10;
+       `assert(o_c, 32'h00000001);
+
         i_a = 32'h00000100;
         i_b = 32'h00000001;
         i_alu_op = `OP_ALU_SRL;
