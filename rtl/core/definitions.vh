@@ -36,7 +36,7 @@
 // RISC-V STORE FUNCT 3
 `define FUNCT_3_ALU_SB 3'b000 // Store Byte
 `define FUNCT_3_ALU_SH 3'b001  // Store Half
-`define FUNCT_3_ALU_SW3'b010 // Store Word
+`define FUNCT_3_ALU_SW 3'b010 // Store Word
 
 // System Instructions
 `define OP_ALU_ECALL  6'b111000 // System Call
