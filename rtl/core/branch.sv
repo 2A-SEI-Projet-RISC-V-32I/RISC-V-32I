@@ -16,8 +16,9 @@ module branch_unit (
     input wire [`DATA_WIDTH-1:0] i_b,
     // OUTPUT
     output reg o_take
+);
 
-    always_comb begin : i_branch_op
+    always_comb begin : branch
         o_take = 1'b0;
         if (i_branch) begin
         case(i_branch_op)  
@@ -32,6 +33,5 @@ module branch_unit (
         endcase
         end 
     end
-);
 
 endmodule
