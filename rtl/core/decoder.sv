@@ -145,6 +145,20 @@ always @* begin
                 default: o_alu_op = `OP_ALU_NOP;
             endcase
         end
+        `OP_SYSTEM: begin 
+            o_reg_write = 1'b0;
+            o_mem_write = 1'b0;
+            if (i_inst[20]) 
+                o_alu_op = `OP_ALU_EBREAK;
+            else 
+                o_alu_op = `OP_ALU_ECALL;
+        end
+        `OP_FENCE: begin
+            if (funct_3) 
+                3'b001: o_alu_op = `OP_ALU_FENCEI;
+            else 
+                o_alu_op = `OP_ALU_FENCEI;
+        end
         default: begin
                 // Unrecognized opcode; no action taken
         end
