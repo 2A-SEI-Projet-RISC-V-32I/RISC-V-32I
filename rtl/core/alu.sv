@@ -1,16 +1,4 @@
-`define DATA_WIDTH 32
-
-// RISC-V ALU Operations
-`define OP_ALU_ADD    6'b011001 // Add ; Computes the sum of two input values
-`define OP_ALU_SUB    6'b011011 // Subtract ; Calculates the difference between two input values
-`define OP_ALU_AND    6'b011101 // Bitwise AND ; Performs a bitwise AND operation on the input values
-`define OP_ALU_OR     6'b011111 // Bitwise OR ; Executes a bitwise OR operation on the input values
-`define OP_ALU_XOR    6'b100001 // Bitwise XOR ; Conducts a bitwise XOR operation on the input values
-`define OP_ALU_SLT    6'b100011 // Set Less Than (signed) ; Evaluates if the first input value is less than the second, returning a boolean result
-`define OP_ALU_SLTU   6'b100101 // Set Less Than (unsigned) ; Compares two unsigned values to determine if the first is less than the second
-`define OP_ALU_SLL    6'b100111 // Shift Left Logical ; Shift Left Logical: Shifts the bits of the first input value to the left, filling with zeros
-`define OP_ALU_SRL    6'b101001 // Shift Right Logical ; Shifts the bits of the first input value to the right, filling with zeros
-`define OP_ALU_SRA    6'b101011 // Shift Right Arithmetic ; Shifts the bits of the first input value to the right, preserving the sign bit
+`include "definitions.vh"
 
 module alu (
     // INPUT
@@ -33,6 +21,19 @@ always @(*) begin
             `OP_ALU_SLL : o_c = i_a << i_b[4:0];
             `OP_ALU_SRL : o_c = i_a >> i_b[4:0];
             `OP_ALU_SRA : o_c = $signed(i_a) >>> i_b[4:0];
+
+            // Load/Store
+            `OP_ALU_LB : o_c = i_a + i_b;
+            `OP_ALU_LH : o_c = i_a + i_b;
+            `OP_ALU_LW : o_c = i_a + i_b;
+            `OP_ALU_LBU : o_c = i_a + i_b;
+            `OP_ALU_LHU : o_c = i_a + i_b;
+            `OP_ALU_SB : o_c = i_a + i_b;
+            `OP_ALU_SH : o_c = i_a + i_b;
+            `OP_ALU_SW : o_c = i_a + i_b;
+
+            // Autres
+            `OP_ALU_ECALL, `OP_ALU_EBREAK, `OP_ALU_FENCE, `OP_ALU_FENCEI : o_c = 32'b0; // Pas de calcul pour ces instructions
 
             default: o_c = 32'b0;
         endcase
