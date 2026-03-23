@@ -20,7 +20,7 @@ if "%RTL_FILE%"=="" (
 )
 
 :: Compilation
-iverilog -g2012 -o "simulation\sim_data\%MODULE%.out" "%RTL_FILE%" "simulation\testbench\%MODULE%_tb.sv"
+iverilog -g2012 -I "rtl\core" -o "simulation\sim_data\%MODULE%.out" "%RTL_FILE%" "simulation\testbench\%MODULE%_tb.sv"
 
 :: Verifie si la compilation a reussi
 if %ERRORLEVEL% NEQ 0 (
