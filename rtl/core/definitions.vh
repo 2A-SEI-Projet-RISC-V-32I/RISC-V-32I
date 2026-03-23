@@ -29,7 +29,7 @@
 // RISC-V LOAD FUNCT 3
 `define FUNCT_3_ALU_LB 3'b000  // Load Byte
 `define FUNCT_3_ALU_LH 3'b001 // Load Half
-`define FUNCT_3_ALU_LW3 3'b010  // Load Word
+`define FUNCT_3_ALU_LW 3'b010  // Load Word
 `define FUNCT_3_ALU_LBU 3'b100 // Load Byte Unsigned
 `define FUNCT_3_ALU_LHU 3'b101  // Load Half Unsigned
 

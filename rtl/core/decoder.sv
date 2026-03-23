@@ -67,8 +67,8 @@ always @* begin
         `OP_BRANCH: begin // Branch Instructions
             o_branch = 1;
             o_reg_write = 0;
-            o_alu_src_a = 0;
-            o_alu_src_b = 0;
+            o_alu_src_a = 1;
+            o_alu_src_b = 1;
             case (funct_3)
                 3'b000 : o_branch_op = `BRANCH_BEQ;
                 3'b001 : o_branch_op = `BRANCH_BNE;
@@ -155,10 +155,10 @@ always @* begin
                 o_alu_op = `OP_ALU_ECALL;
         end
         `OP_FENCE: begin
-            if (funct_3) 
-                3'b001: o_alu_op = `OP_ALU_FENCEI;
-            else 
+            if (funct_3 == 3'b001) 
                 o_alu_op = `OP_ALU_FENCEI;
+            else 
+                o_alu_op = `OP_ALU_FENCEI; 
         end
         default: begin
                 // Unrecognized opcode; no action taken
