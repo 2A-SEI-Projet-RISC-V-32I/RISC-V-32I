@@ -17,7 +17,7 @@
         $finish; \
     end
 
-module dat_memory_tb;
+module data_mem_tb;
 
     localparam MEM_SIZE = 4096;
     localparam DATA_WIDTH = 32;
@@ -38,11 +38,10 @@ module dat_memory_tb;
     always #5 clk = ~clk;
     
     initial begin
-        // --- INITIALISATION ---
+        // INITIALISATION
         we = 1'b0; func = `LW; addr = 12'b0; i_data = 32'b0;
 
-        // --- ÉTAPE 1 : ÉCRITURE DU MOT COMPLET (SW) ---
-        // 0x8A4B_C2F1
+        // ÉCRITURE DU MOT COMPLET (SW)
         #10;
         we = 1'b1;
         addr = 12'h004; 
@@ -52,10 +51,10 @@ module dat_memory_tb;
         #10;
         we = 1'b0;
 
-        // --- ÉTAPE 2 : TESTS DE LECTURE OCTETS (LB / LBU) ---
+        // TESTS DE LECTURE OCTETS (LB / LBU)
         $display("Testing Byte Loads...");
 
-        // LB (Sign-Extended) sur l'octet 0 (11110001 -> bit 7 est 1)
+        // LB (Sign-Extended) sur l'octet 0
         addr = 12'h004; func = `LB; #1;
         `assert(o_data, 32'b11111111_11111111_11111111_11110001); 
 
@@ -63,11 +62,11 @@ module dat_memory_tb;
         func = `LBU; #1;
         `assert(o_data, 32'b00000000_00000000_00000000_11110001);
 
-        // LB (Sign-Extended) sur l'octet 2 (01001011 -> bit 7 est 0)
+        // LB (Sign-Extended) sur l'octet 2
         addr = 12'h006; func = `LB; #1;
         `assert(o_data, 32'b00000000_00000000_00000000_01001011);
 
-        // --- ÉTAPE 3 : TESTS DE LECTURE DEMI-MOTS (LH / LHU) ---
+        // TESTS DE LECTURE DEMI-MOTS (LH / LHU)
         $display("Testing Half-word Loads...");
 
         // Test LH sur octets 1:0 (11000010_11110001 -> bit 15 est 1)
@@ -78,12 +77,12 @@ module dat_memory_tb;
         func = `LHU; #1;
         `assert(o_data, 32'b00000000_00000000_11000010_11110001);
 
-        // --- ÉTAPE 4 : TEST DE LECTURE MOT COMPLET (LW) ---
+        // TEST DE LECTURE MOT COMPLET (LW)
         $display("Testing Word Load...");
         addr = 12'h004; func = `LW; #1;
         `assert(o_data, 32'b10001010_01001011_11000010_11110001);
 
-        // --- ÉTAPE 5 : TEST D'ÉCRITURE PARTIELLE (SB) ---
+        // TEST D'ÉCRITURE PARTIELLE (SB) 
         // On cible l'octet 1 (adresse 0x005) qui vaut 11000010 (C2)
         // On veut le remplacer par 00000000 (00)
         $display("Testing Store Byte...");
@@ -99,7 +98,7 @@ module dat_memory_tb;
         addr = 12'h004;
         #1;
         // Le C2 doit être devenu 00. 
-        // Attendu: 10001010_01001011_00000000_11110001 (8A4B00F1)
+        // Attendu: 10001010_01001011_00000000_11110001
         `assert(o_data, 32'b10001010_01001011_00000000_11110001);
 
         $display("--- ALL TESTS PASSED SUCCESSFULLY ---");
