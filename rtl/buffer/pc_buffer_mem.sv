@@ -1,15 +1,15 @@
-module alu_buffer_ex(
+module pc_buffer_mem (
     input logic clk,
     input logic rst,
-    input logic [31:0] i_addr,
-    output logic [31:0] o_addr
+    input logic [31:0] i_pc,
+    output logic [31:0] o_pc
 );
 
 always_ff @(posedge clk or posedge rst) begin
     if (rst) begin
-      o_addr <= 32'b0;
+      o_pc <= 32'b0;
     end else begin
-      o_addr <= i_addr;
+      o_pc <= i_pc;
     end
 end
 

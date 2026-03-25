@@ -1,15 +1,15 @@
-module alu_buffer_ex(
+module wd_buffer_ex(
     input logic clk,
     input logic rst,
-    input logic [31:0] i_addr,
-    output logic [31:0] o_addr
+    input logic [31:0] i_data,
+    output logic [31:0] o_data
 );
 
 always_ff @(posedge clk or posedge rst) begin
     if (rst) begin
-      o_addr <= 32'b0;
+      o_data <= 32'b0;
     end else begin
-      o_addr <= i_addr;
+      o_data <= i_data;
     end
 end
 
