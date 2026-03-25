@@ -22,16 +22,6 @@ always @(*) begin
             `OP_ALU_SRL : o_c = i_a >> i_b[4:0];
             `OP_ALU_SRA : o_c = $signed(i_a) >>> i_b[4:0];
 
-            // Load/Store
-            `OP_ALU_LB : o_c = i_a + i_b;
-            `OP_ALU_LH : o_c = i_a + i_b;
-            `OP_ALU_LW : o_c = i_a + i_b;
-            `OP_ALU_LBU : o_c = i_a + i_b;
-            `OP_ALU_LHU : o_c = i_a + i_b;
-            `OP_ALU_SB : o_c = i_a + i_b;
-            `OP_ALU_SH : o_c = i_a + i_b;
-            `OP_ALU_SW : o_c = i_a + i_b;
-
             // Autres
             `OP_ALU_ECALL, `OP_ALU_EBREAK, `OP_ALU_FENCE, `OP_ALU_FENCEI : o_c = 32'b0; // Pas de calcul pour ces instructions
 
