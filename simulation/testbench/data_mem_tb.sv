@@ -31,7 +31,7 @@ module dat_memory_tb;
     wire [DATA_WIDTH-1:0] o_data;
 
     data_memory #( .MEM_SIZE(MEM_SIZE) ) dut (
-        .i_clk(clk), .i_we(we), .i_func(func), .i_addr(addr), .i_data(i_data), .o_data(o_data)
+        .i_clk(clk), .i_we(we), .i_func3(func), .i_addr(addr), .i_data(i_data), .o_data(o_data)
     );
 
     initial clk = 1'b0;
@@ -108,5 +108,10 @@ module dat_memory_tb;
 
     always @(posedge clk) begin 
         $display("T=%2t | Addr=%h | Out=%b", $time, addr, o_data);
-    end 
+    end
+
+    initial begin
+    $dumpfile("data_mem.vcd");
+    $dumpvars;  
+    end
 endmodule

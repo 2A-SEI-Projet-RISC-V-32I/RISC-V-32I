@@ -51,7 +51,7 @@ module data_memory #(
         end
     end
 
-    always_comb begin
+    always @(*) begin
 
         o_data = 32'b0;
 
