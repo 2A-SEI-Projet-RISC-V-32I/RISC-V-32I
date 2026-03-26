@@ -1,7 +1,7 @@
 module pc_buffer_fetch (
     input logic clk,
     input logic rst,
-    input logic [31:0] i_pc_,
+    input logic [31:0] i_pc,
     output logic [31:0] o_pc
 );
 
