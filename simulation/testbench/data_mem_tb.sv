@@ -1,15 +1,7 @@
+import definitions::*;
+
 `default_nettype none
 `timescale 1ns/1ns
-
-// Définitions des fonctions
-`define LB  3'b000 
-`define LH  3'b001 
-`define LW  3'b010 
-`define LBU 3'b100 
-`define LHU 3'b101 
-`define SB  3'b000 
-`define SH  3'b001 
-`define SW  3'b010 
 
 `define assert(signal, value) \
     if (signal !== value) begin \
@@ -39,14 +31,14 @@ module data_mem_tb;
     
     initial begin
         // INITIALISATION
-        we = 1'b0; func = `LW; addr = 12'b0; i_data = 32'b0;
+        we = 1'b0; func = LW; addr = 12'b0; i_data = 32'b0;
 
         // ÉCRITURE DU MOT COMPLET (SW)
         #10;
         we = 1'b1;
         addr = 12'h004; 
         i_data = 32'b10001010_01001011_11000010_11110001; 
-        func = `SW;
+        func = SW;
         
         #10;
         we = 1'b0;
@@ -55,31 +47,31 @@ module data_mem_tb;
         $display("Testing Byte Loads...");
 
         // LB (Sign-Extended) sur l'octet 0
-        addr = 12'h004; func = `LB; #1;
+        addr = 12'h004; func = LB; #1;
         `assert(o_data, 32'b11111111_11111111_11111111_11110001); 
 
         // LBU (Zero-Extended) sur l'octet 0
-        func = `LBU; #1;
+        func = LBU; #1;
         `assert(o_data, 32'b00000000_00000000_00000000_11110001);
 
         // LB (Sign-Extended) sur l'octet 2
-        addr = 12'h006; func = `LB; #1;
+        addr = 12'h006; func = LB; #1;
         `assert(o_data, 32'b00000000_00000000_00000000_01001011);
 
         // TESTS DE LECTURE DEMI-MOTS (LH / LHU)
         $display("Testing Half-word Loads...");
 
         // Test LH sur octets 1:0 (11000010_11110001 -> bit 15 est 1)
-        addr = 12'h004; func = `LH; #1;
+        addr = 12'h004; func = LH; #1;
         `assert(o_data, 32'b11111111_11111111_11000010_11110001);
 
         // Test LHU sur octets 1:0
-        func = `LHU; #1;
+        func = LHU; #1;
         `assert(o_data, 32'b00000000_00000000_11000010_11110001);
 
         // TEST DE LECTURE MOT COMPLET (LW)
         $display("Testing Word Load...");
-        addr = 12'h004; func = `LW; #1;
+        addr = 12'h004; func = LW; #1;
         `assert(o_data, 32'b10001010_01001011_11000010_11110001);
 
         // TEST D'ÉCRITURE PARTIELLE (SB) 
@@ -89,12 +81,12 @@ module data_mem_tb;
         we = 1'b1;
         addr = 12'h005; 
         i_data = 32'b00000000_00000000_00000000_00000000; 
-        func = `SB;
+        func = SB;
         #10;
         we = 1'b0;
 
         // On relit le mot complet à l'adresse 0x004 pour voir le changement
-        func = `LW;
+        func = LW;
         addr = 12'h004;
         #1;
         // Le C2 doit être devenu 00. 

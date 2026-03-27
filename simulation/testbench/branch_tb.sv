@@ -1,15 +1,7 @@
+import definitions::*;
+
 `default_nettype none
 `timescale 1ns/1ns
-
-`define DATA_WIDTH 32
-
-`define BRANCH_BEQ      3'b000 // Branch Equal
-`define BRANCH_BNE      3'b001 // Branch Not Equal
-`define BRANCH_BLT      3'b100 // Branch Less Than
-`define BRANCH_BGE      3'b101 // Branch Greater Than Or Equal
-`define BRANCH_BLTU     3'b110 // Branch Less Than Unsigned
-`define BRANCH_BGEU     3'b111 // Branch Greater Than Or Equal Unsigned
-`define BRANCH_JAL_JALR 3'b010 // Jump in case of JAL or JALR instrucion
 
 `define assert(signal, value) \
         if (signal !== value) begin \
@@ -22,8 +14,8 @@ module  branch_unit_tb;
   reg clk;
   reg i_branch = 1'b0;
   reg [2:0] i_branch_op = 3'b000;
-  reg [`DATA_WIDTH-1:0] i_a = 32'h00000000;
-  reg [`DATA_WIDTH-1:0] i_b = 32'h00000000;
+  reg [DATA_WIDTH-1:0] i_a = 32'h00000000;
+  reg [DATA_WIDTH-1:0] i_b = 32'h00000000;
   
   wire o_take;
 
@@ -45,15 +37,15 @@ module  branch_unit_tb;
       i_a = 32'h00000000;
       i_b = 32'h00000000;
       i_branch = 1'b1;
-      i_branch_op = `BRANCH_BEQ;
+      i_branch_op = BRANCH_BEQ;
     #10;
       `assert(dut.o_take, 1'b1);
       i_branch = 1'b1;
-      i_branch_op = `BRANCH_BNE;
+      i_branch_op = BRANCH_BNE;
     #10;
       `assert(dut.o_take, 1'b0);
       i_branch = 1'b1;
-      i_branch_op = `BRANCH_BNE;
+      i_branch_op = BRANCH_BNE;
       i_a = 32'h00000000;
       i_b = 32'h00000001;
     #10;
@@ -61,27 +53,27 @@ module  branch_unit_tb;
       i_a = 32'h11111111;
       i_b = 32'h11111110;
       i_branch = 1'b1;
-      i_branch_op = `BRANCH_BLT;
+      i_branch_op = BRANCH_BLT;
     #10;
       `assert(dut.o_take, 1'b0);
       i_branch = 1'b1;
-      i_branch_op = `BRANCH_BGE;  
+      i_branch_op = BRANCH_BGE;  
     #10;
       `assert(dut.o_take, 1'b1);
       i_branch = 1'b1;
-      i_branch_op = `BRANCH_BLTU;  
+      i_branch_op = BRANCH_BLTU;  
     #10;
       `assert(dut.o_take, 1'b0);
       i_branch = 1'b1;
-      i_branch_op = `BRANCH_BGEU; 
+      i_branch_op = BRANCH_BGEU; 
     #10;
       `assert(dut.o_take, 1'b1);
       i_branch = 1'b1;
-      i_branch_op = `BRANCH_JAL_JALR;  
+      i_branch_op = BRANCH_JAL_JALR;  
     #10;
       `assert(dut.o_take, 1'b1);
       i_branch = 1'b0;
-      i_branch_op = `BRANCH_JAL_JALR;  
+      i_branch_op = BRANCH_JAL_JALR;  
     #10;
       `assert(dut.o_take, 1'b0);
     $finish;
