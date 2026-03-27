@@ -208,22 +208,133 @@ wb_mux wb_mux(
     .o_data (o_wb)
 )
 
-controller controller(
-    .i_inst (),
-    .o_opcode (opcode),
-    .o_branch (),
-    .o_result_mux (),
-    .o_branch_op (),
-    .o_mem_write (),
-    .o_alu_src_a (),
-    .o_alu_src_b (),
-    .o_reg_write (),    
-    .o_alu_op (),
-    .o_funct_3 (),
-    .o_rs1_addr (),
-    .o_rs2_addr (),
-    .o_rd_addr ()
-);
+// ETAGE DECODE (ID)
+
+    wire [6:0]  id_opcode;
+    wire        id_branch;
+    wire [1:0]  id_result_mux;
+    wire [2:0]  id_branch_op;
+    wire        id_mem_write;
+    wire        id_alu_src_a;
+    wire        id_alu_src_b;
+    wire        id_reg_write;
+    wire [5:0]  id_alu_op;
+    wire [2:0]  id_funct_3;
+    wire [4:0]  id_rs1_addr;
+    wire [4:0]  id_rs2_addr;
+    wire [4:0]  id_rd_addr;
+
+    controller controller (
+        .i_inst(id_inst),
+        .o_opcode(id_opcode),
+        .o_branch(id_branch),
+        .o_result_mux(id_result_mux),
+        .o_branch_op(id_branch_op),
+        .o_mem_write(id_mem_write),
+        .o_alu_src_a(id_alu_src_a),
+        .o_alu_src_b(id_alu_src_b),
+        .o_reg_write(id_reg_write),
+        .o_alu_op(id_alu_op),
+        .o_funct_3(id_funct_3),
+        .o_rs1_addr(id_rs1_addr),
+        .o_rs2_addr(id_rs2_addr),
+        .o_rd_addr(id_rd_addr)
+    );
+
+  
+    // Buffer de decode vers execute (D/E)
+
+
+    // Déclaration des signaux qui sortent dans l'étage execute
+    wire        ex_branch;
+    wire [1:0]  ex_result_mux;
+    wire [2:0]  ex_branch_op;
+    wire        ex_mem_write;
+    wire        ex_alu_src_a;
+    wire        ex_alu_src_b;
+    wire        ex_reg_write;
+    wire [5:0]  ex_alu_op;
+    wire [2:0]  ex_funct_3;
+    wire [4:0]  ex_rd_addr;
+
+    controller_buffer_dec controller_buffer_dec (
+        .clk(clk),
+        .rst(rst),
+        
+        // Entrées (venant de ID)
+        .i_branch(id_branch),
+        .i_result_mux(id_result_mux),
+        .i_branch_op(id_branch_op),
+        .i_mem_write(id_mem_write),
+        .i_alu_src_a(id_alu_src_a),
+        .i_alu_src_b(id_alu_src_b),
+        .i_reg_write(id_reg_write),
+        .i_alu_op(id_alu_op),
+        .i_funct_3(id_funct_3),
+        .i_rd_addr(id_rd_addr),
+
+        // Sorties (allant vers EX)
+        .o_branch(ex_branch),
+        .o_result_mux(ex_result_mux),
+        .o_branch_op(ex_branch_op),
+        .o_mem_write(ex_mem_write),
+        .o_alu_src_a(ex_alu_src_a), 
+        .o_alu_src_b(ex_alu_src_b), 
+        .o_reg_write(ex_reg_write),    
+        .o_alu_op(ex_alu_op),
+        .o_funct_3(ex_funct_3),
+        .o_rd_addr(ex_rd_addr)    
+    );
+
+    // Buffer de execute vers memory (E/M)
+
+    // Déclaration des signaux qui sortent dans l'étage mem
+    wire [1:0]  mem_result_mux;
+    wire        mem_mem_write;
+    wire        mem_reg_write;
+    wire [2:0]  mem_funct_3;
+    wire [4:0]  mem_rd_addr;
+
+    controller_buffer_ex controller_buffer_ex (
+        .clk(clk),
+        .rst(rst),
+
+        // Entrées (venant de EX)
+        .i_result_mux(ex_result_mux),
+        .i_mem_write(ex_mem_write),
+        .i_reg_write(ex_reg_write),    
+        .i_funct_3(ex_funct_3),
+        .i_rd_addr(ex_rd_addr),
+        
+        // Sorties (allant vers MEM)
+        .o_result_mux(mem_result_mux),
+        .o_mem_write(mem_mem_write),
+        .o_reg_write(mem_reg_write),    
+        .o_funct_3(mem_funct_3),
+        .o_rd_addr(mem_rd_addr) 
+    );
+
+    // Buffer de memory vers write-back (M/W)
+
+    // Déclaration des signaux qui sortent dans l'étage WRITE-BACK
+    wire [1:0]  wb_result_mux;
+    wire        wb_reg_write;
+    wire [4:0]  wb_rd_addr;
+
+    controller_buffer_mem controller_buffer_mem (
+        .clk(clk),
+        .rst(rst),
+
+        // Entrées (venant de MEM)
+        .i_result_mux(mem_result_mux),
+        .i_reg_write(mem_reg_write),    
+        .i_rd_addr(mem_rd_addr),
+        
+        // Sorties (allant vers WB)
+        .o_result_mux(wb_result_mux),
+        .o_reg_write(wb_reg_write),    
+        .o_rd_addr(wb_rd_addr)    
+    );
 
 
 
