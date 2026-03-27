@@ -1,4 +1,4 @@
-module mux_2_inputs (
+module alu_mux (
     input logic [31:0] i_data_1,
     input logic [31:0] i_data_2,
     input logic i_sel,

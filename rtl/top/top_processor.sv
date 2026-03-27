@@ -17,35 +17,35 @@ logic [31:0]
 logic [31:0]
 logic [31:0]
 
-pc pc (
+pc pc(
     .clk (clk),
     .rst (rst),
     .i_pc (next_pc),
     .o_pc (o_pc),
 );
 
-pc_buffer pc_buffer_fetch (
+pc_buffer pc_buffer_fetch(
     .clk (clk),
     .rst (rst),
     .i_pc (o_pc),
     .o_pc (o_pc_F),
 );
 
-pc_buffer pc_buffer_decode (
+pc_buffer pc_buffer_decode(
     .clk (clk),
     .rst (rst),
     .i_pc (o_pc_F),
     .o_pc (o_pc_D),
 );
 
-pc_buffer pc_buffer_execute (
+pc_buffer pc_buffer_execute(
     .clk (clk),
     .rst (rst),
     .i_pc (o_pc_D),
     .o_pc (o_pc_E),
 );
 
-pc_buffer pc_buffer_memory (
+pc_buffer pc_buffer_memory(
     .clk (clk),
     .rst (rst),
     .i_pc (o_pc_E),
@@ -96,6 +96,16 @@ im_buffer im_buffer_memory(
     .o_instr (o_inst_M)
 );
 
+sign_ext sign_ext(
+    .i_inst (inst),
+    .i_opcode (opcode),
+    .o_immediate_extended (o_sign_ext_D)
+);
+
+sign_ext_buffer sign_ext_buffer(
+
+);
+
 register_file register_file(
     .i_clk (clk),
     .i_rst (rst),
@@ -106,21 +116,35 @@ register_file register_file(
     .i_rs2_addr (rs2_addr),
     .o_rs1 (rs1),
     .o_rs2 (rs2),
-)
+);
 
 rs_buffer rs1_buffer_decode(
     .clk (clk),
     .rst (rst),
     .i_rs (rs1),
     .o_rs (rs1_D)
-)
+);
 
 rs_buffer rs2_buffer_decode(
     .clk (clk),
     .rst (rst),
     .i_rs (rs2),
     .o_rs (rs2_D)
-)
+);
+
+alu_mux alu_mux_A(
+    .i_data_1 (o_pc_D),
+    .i_data_2 (rs1_D),
+    .i_sel (sel_AE),
+    .o_data (o_mux_alu_A)
+);
+
+alu_mux alu_mux_B_imm(
+    .i_data_2 (rs2_D),
+    .i_data_1 (o_sign_ext_D),
+    .i_sel (sel_BE),
+    .o_data (o_mux_alu_B)
+  );
 
 controller controller(
     .i_inst (),
@@ -137,7 +161,7 @@ controller controller(
     .o_rs1_addr (),
     .o_rs2_addr (),
     .o_rd_addr ()
-)
+);
 
 
 
