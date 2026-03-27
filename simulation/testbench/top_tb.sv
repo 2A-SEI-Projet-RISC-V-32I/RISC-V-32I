@@ -16,11 +16,16 @@ module top_tb;
         
         #20 rst = 0;
 
-        $readmemh("simple.hex", mem);
-
 
         #10000; 
         $display("Timeout : Le programme est trop long ou bloqué !");
         $finish;
     end
+      
+    initial begin
+        $dumpfile("top.vcd");
+        $dumpvars;  
+    end
+
 endmodule
+

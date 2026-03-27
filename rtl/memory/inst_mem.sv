@@ -21,11 +21,17 @@ module instruction_memory #(
             mem[i] = 32'h00000000;
         end
 
-        mem[0] = 32'h00108113;
-        mem[1] = 32'h00108193;
-        mem[2] = 32'h00310233;
-        mem[3] = 32'hfe218ae3;
-        mem[4] = 32'h00000000;
+    // Pour le top_tb (à commenter ou non en fonction)
+
+        $readmemh("programs/bin/simple.hex", mem);
+
+    // Pour le inst_mem_tb (à commenter ou non en fonction)
+
+    //  mem[0] = 32'h00108113;
+    //  mem[1] = 32'h00108193;
+    //  mem[2] = 32'h00310233;
+    //  mem[3] = 32'hfe218ae3;
+    //  mem[4] = 32'h00000000;
     end
 
     always_comb begin
