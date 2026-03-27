@@ -119,8 +119,8 @@ register_file register_file(
     .i_clk (clk),
     .i_rst (rst),
     .i_we (reg_we_W),
-    .i_rd (rd),
-    .i_rd_addr (rd_addr),
+    .i_rd (o_wb),
+    .i_rd_addr (wb_rd_addr),
     .i_rs1_addr (rs1_addr),
     .i_rs2_addr (rs2_addr),
     .o_rs1 (rs1),
@@ -141,7 +141,7 @@ rs_buffer rs2_buffer_decode(
     .o_rs (rs2_D)
 );
 
-branch branch(
+branch branch_inst(
     .i_branch (branch_E),
     .i_branch_op (branch_type_E),
     .i_a (rs1_D),
