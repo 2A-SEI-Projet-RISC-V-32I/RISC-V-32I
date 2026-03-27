@@ -1,3 +1,5 @@
+import definitions::*;
+
 `default_nettype none
 `timescale 1ns/1ns
 
@@ -10,8 +12,8 @@
 module controller_tb;
 
   reg clk;
-  reg [`INST_WIDTH-1:0] inst = 32'h00000000;
-  wire [`OPCODE-1:0] opcode;
+  reg [INST_WIDTH-1:0] inst = 32'h00000000;
+  wire [OPCODE-1:0] opcode;
   wire branch;
   wire [1:0] result_mux;
   wire [2:0] branch_op;
@@ -21,9 +23,9 @@ module controller_tb;
   wire reg_write;
   wire [5:0] alu_op;
   wire [2:0] funct_3_out;
-  wire [$clog2(`NUM_REGISTER) - 1: 0] rs1_addr;
-  wire [$clog2(`NUM_REGISTER) - 1: 0] rs2_addr;
-  wire [$clog2(`NUM_REGISTER) - 1: 0] rd_addr;
+  wire [$clog2(NUM_REGISTER) - 1: 0] rs1_addr;
+  wire [$clog2(NUM_REGISTER) - 1: 0] rs2_addr;
+  wire [$clog2(NUM_REGISTER) - 1: 0] rd_addr;
 
   controller dut (
     .i_inst(inst),
@@ -51,7 +53,7 @@ module controller_tb;
   initial begin
         inst = 32'h0007b2b7; //lui x5, 123
     #10;
-        `assert(opcode, `OP_LUI);
+        `assert(opcode, OP_LUI);
         `assert(branch, 1'b0);
         `assert(result_mux, 2'b00);        
         `assert(mem_write, 1'b0);
@@ -62,7 +64,7 @@ module controller_tb;
 
         inst = 32'h0007b297; //auipc x5, 123
     #10;
-        `assert(opcode, `OP_AUIPC);
+        `assert(opcode, OP_AUIPC);
         `assert(branch, 1'b0);
         `assert(result_mux, 2'b00);            
         `assert(mem_write, 1'b0);        
@@ -73,44 +75,44 @@ module controller_tb;
 
         inst = 32'h4d000bef; //jal x23, 1232
     #10;
-        `assert(opcode, `OP_JAL);
+        `assert(opcode, OP_JAL);
         `assert(branch, 1'b1);
         `assert(result_mux, 2'b01);            
         `assert(mem_write, 1'b0);        
         `assert(alu_src_a, 1'b1);        
         `assert(alu_src_b, 1'b1); 
-        `assert(branch_op, `BRANCH_JAL_JALR); 
+        `assert(branch_op, BRANCH_JAL_JALR); 
         `assert(reg_write, 1'b1); 
         `assert(rd_addr, 5'b10111);
 
         inst = 32'h4d000be7; //jalr x23, 1232(x0)
     #10;
-        `assert(opcode, `OP_JALR);
+        `assert(opcode, OP_JALR);
         `assert(branch, 1'b1);
         `assert(result_mux, 2'b01);            
         `assert(mem_write, 1'b0);        
         `assert(alu_src_a, 1'b0);        
         `assert(alu_src_b, 1'b1); 
-        `assert(branch_op, `BRANCH_JAL_JALR); 
+        `assert(branch_op, BRANCH_JAL_JALR); 
         `assert(reg_write, 1'b1); 
         `assert(rd_addr, 5'b10111);
         
         inst = 32'h03924563; //blt x4, x25, 42
     #10;
-        `assert(opcode, `OP_BRANCH);
+        `assert(opcode, OP_BRANCH);
         `assert(branch, 1'b1);
         `assert(result_mux, 2'b00);            
         `assert(mem_write, 1'b0);        
         `assert(alu_src_a, 1'b1);      
         `assert(alu_src_b, 1'b1);  
-        `assert(branch_op, `BRANCH_BLT); 
+        `assert(branch_op, BRANCH_BLT); 
         `assert(reg_write, 1'b0); 
         `assert(rs1_addr, 5'b00100);
         `assert(rs2_addr, 5'b11001);
 
         inst = 32'h01712703; //lw x14, 23(x2) 
     #10;
-        `assert(opcode, `OP_LOAD);
+        `assert(opcode, OP_LOAD);
         `assert(branch, 1'b0);
         `assert(result_mux, 2'b10);            
         `assert(mem_write, 1'b0);        
@@ -122,7 +124,7 @@ module controller_tb;
 
         inst = 32'h00e12ba3; //sw x14, 23(x2)
     #10;
-        `assert(opcode, `OP_STORE);
+        `assert(opcode, OP_STORE);
         `assert(branch, 1'b0);
         `assert(result_mux, 2'b00);            
         `assert(mem_write, 1'b1);        
@@ -134,28 +136,28 @@ module controller_tb;
 
         inst = 32'h00f0c1b3; //xor x3, x1, x15
     #10;
-        `assert(opcode, `OP_ALU);
+        `assert(opcode, OP_ALU);
         `assert(branch, 1'b0);
         `assert(result_mux, 2'b00);            
         `assert(mem_write, 1'b0);        
         `assert(alu_src_a, 1'b0);        
         `assert(alu_src_b, 1'b0); 
         `assert(reg_write, 1'b1); 
-        `assert(alu_op, `OP_ALU_XOR);
+        `assert(alu_op, OP_ALU_XOR);
         `assert(rs1_addr, 5'b00001);
         `assert(rs2_addr, 5'b01111);
         `assert(rd_addr, 5'b00011);
 
         inst = 32'h02020113; //addi x2, x4, 32
     #10;
-        `assert(opcode, `OP_ALUI);
+        `assert(opcode, OP_ALUI);
         `assert(branch, 1'b0);
         `assert(result_mux, 2'b00);            
         `assert(mem_write, 1'b0);        
         `assert(alu_src_a, 1'b0);        
         `assert(alu_src_b, 1'b1); 
         `assert(reg_write, 1'b1); 
-        `assert(alu_op, `OP_ALU_ADD);
+        `assert(alu_op, OP_ALU_ADD);
         `assert(rs1_addr, 5'b00100);
         `assert(rd_addr, 5'b00010);
 
@@ -163,37 +165,37 @@ module controller_tb;
         // Test du bit 30 avec ADD (Bit 30 = 0)
         inst = 32'h00000033; // add x0, x0, x0
     #10;
-        `assert(opcode, `OP_ALU);
-        `assert(alu_op, `OP_ALU_ADD);
+        `assert(opcode, OP_ALU);
+        `assert(alu_op, OP_ALU_ADD);
 
         // Test du bit 30 avec SUB (Bit 30 = 1)
         inst = 32'h40000033; // sub x0, x0, x0
     #10;
-        `assert(opcode, `OP_ALU);
-        `assert(alu_op, `OP_ALU_SUB);
+        `assert(opcode, OP_ALU);
+        `assert(alu_op, OP_ALU_SUB);
 
         // Test du bit 30 avec SRL (Bit 30 = 0)
         inst = 32'h00005033; // srl x0, x0, x0
     #10;
-        `assert(opcode, `OP_ALU);
-        `assert(alu_op, `OP_ALU_SRL);
+        `assert(opcode, OP_ALU);
+        `assert(alu_op, OP_ALU_SRL);
 
         // Test du bit 30 avec SRA (Bit 30 = 1)
         inst = 32'h40005033; // sra x0, x0, x0
     #10;
-        `assert(opcode, `OP_ALU);
-        `assert(alu_op, `OP_ALU_SRA);
+        `assert(opcode, OP_ALU);
+        `assert(alu_op, OP_ALU_SRA);
 
         // Test d'un autre type de saut (BEQ)
         inst = 32'h00000063; // beq x0, x0, 0
     #10;
-        `assert(opcode, `OP_BRANCH);
-        `assert(branch_op, `BRANCH_BEQ);
+        `assert(opcode, OP_BRANCH);
+        `assert(branch_op, BRANCH_BEQ);
 
         // Test d'une instruction Système (ECALL)
         inst = 32'h00000073; // ecall
     #10;
-        `assert(opcode, 7'b1110011); // `OP_SYSTEM
+        `assert(opcode, 7'b1110011); // OP_SYSTEM
         `assert(reg_write, 1'b0);    // Interdiction d'écrire !
         `assert(mem_write, 1'b0);    // Interdiction d'écrire !
 

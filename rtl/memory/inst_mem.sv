@@ -1,4 +1,4 @@
-`define INST_WIDTH 32
+import definitions::*;
 
 module instruction_memory #(
     parameter MEM_SIZE = 1024 
@@ -9,10 +9,10 @@ module instruction_memory #(
     //doivent etre transformé en 10 avant le bloc d'instruction memoire
     input wire [$clog2(MEM_SIZE)-1:0] addr, 
     // OUTPUT
-    output reg [`INST_WIDTH-1:0] inst
+    output reg [INST_WIDTH-1:0] inst
 );
 
-    reg [`INST_WIDTH-1:0] mem [0:MEM_SIZE-1];
+    reg [INST_WIDTH-1:0] mem [0:MEM_SIZE-1];
 
     integer i;
 

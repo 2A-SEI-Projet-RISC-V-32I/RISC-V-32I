@@ -1,3 +1,5 @@
+import definitions::*;
+
 `default_nettype none
 `timescale 1ns/1ns
 
@@ -11,7 +13,7 @@ module inst_mem_tb;
 
   localparam MEM_SIZE = 1024;
   reg [$clog2(MEM_SIZE)-1:0] addr = 32'h00000000;
-  wire [`INST_WIDTH-1:0] inst;
+  wire [INST_WIDTH-1:0] inst;
 
   instruction_memory dut (
     .addr(addr),

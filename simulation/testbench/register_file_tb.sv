@@ -1,3 +1,5 @@
+import definitions::*;
+
 `default_nettype none
 `timescale 1ns/1ns
 
@@ -12,14 +14,14 @@ module register_file_tb;
   reg clk;
   reg rst;
   reg we;
-  reg [$clog2(`NUM_REGISTER)-1:0] rd_addr = 32'h00000000;
-  reg [`DATA_WIDTH-1:0] rd = 32'h00000000;
+  reg [$clog2(NUM_REGISTER)-1:0] rd_addr = 32'h00000000;
+  reg [DATA_WIDTH-1:0] rd = 32'h00000000;
 
-  reg [$clog2(`NUM_REGISTER)-1:0] rs1_addr = 32'h00000000;
-  reg [$clog2(`NUM_REGISTER)-1:0] rs2_addr = 32'h00000000;
+  reg [$clog2(NUM_REGISTER)-1:0] rs1_addr = 32'h00000000;
+  reg [$clog2(NUM_REGISTER)-1:0] rs2_addr = 32'h00000000;
 
-  wire [`DATA_WIDTH-1:0] rs1;
-  wire [`DATA_WIDTH-1:0] rs2;
+  wire [DATA_WIDTH-1:0] rs1;
+  wire [DATA_WIDTH-1:0] rs2;
 
   register_file dut (
     .i_clk(clk),
