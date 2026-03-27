@@ -4,7 +4,6 @@ module controller_buffer_dec (
     input wire clk,
     input wire rst,
 
-    input wire [`OPCODE-1:0] i_opcode,
     input wire i_branch,
     input wire [1:0] i_result_mux,
     input wire [2:0] i_branch_op,
@@ -16,7 +15,6 @@ module controller_buffer_dec (
     input wire [2:0] i_funct_3,
     input wire [$clog2(`NUM_REGISTER) - 1: 0] i_rd_addr,
     
-    output logic [`OPCODE-1:0] o_opcode,
     output logic o_branch,
     output logic [1:0] o_result_mux,
     output logic [2:0] o_branch_op,
@@ -31,7 +29,6 @@ module controller_buffer_dec (
 
 always_ff @(posedge clk or posedge rst) begin
     if (rst) begin
-        o_opcode     <= '0;
         o_branch     <= 1'b0;
         o_result_mux <= '0;
         o_branch_op  <= '0;
@@ -44,7 +41,6 @@ always_ff @(posedge clk or posedge rst) begin
         o_rd_addr    <= '0;
     end 
     else begin
-        o_opcode     <= i_opcode;
         o_branch     <= i_branch;
         o_result_mux <= i_result_mux;
         o_branch_op  <= i_branch_op;
