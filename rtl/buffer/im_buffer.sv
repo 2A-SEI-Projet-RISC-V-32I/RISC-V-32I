@@ -1,15 +1,15 @@
-module alu_buffer_mem(
+module im__buffer(
     input logic clk,
     input logic rst,
-    input logic [31:0] i_addrM,
-    output logic [31:0] o_addrM
+    input logic [31:0] i_instr,
+    output logic [31:0] o_instr
 );
 
 always_ff @(posedge clk or posedge rst) begin
     if (rst) begin
-      o_addrM <= 32'b0;
+      o_instr <= 32'b0;
     end else begin
-      o_addrM <= i_addrM;
+      o_instr <= i_instr;
     end
 end
 
