@@ -1,15 +1,15 @@
 module im__buffer_mem(
     input logic clk,
     input logic rst,
-    input logic [31:0] i_instruction,
-    output logic [31:0] o_instruction
+    input logic [31:0] i_instrM,
+    output logic [31:0] o_instrM
 );
 
 always_ff @(posedge clk or posedge rst) begin
     if (rst) begin
-      o_instruction <= 32'b0;
+      o_instrM <= 32'b0;
     end else begin
-      o_instruction <= i_instruction;
+      o_instrM<= i_instrM;
     end
 end
 
