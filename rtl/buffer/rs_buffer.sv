@@ -1,15 +1,15 @@
-module rs2_buffer_dec(
+module rs_buffer_(
     input logic clk,
     input logic rst,
-    input logic [31:0] i_rs2,
-    output logic [31:0] o_rs2
+    input logic [31:0] i_rs,
+    output logic [31:0] o_rs
 );
 
 always_ff @(posedge clk or posedge rst) begin
     if (rst) begin
-      o_rs2 <= 32'b0;
+      o_rs <= 32'b0;
     end else begin
-      o_rs2 <= i_rs2;
+      o_rs <= i_rs;
     end
 end
 

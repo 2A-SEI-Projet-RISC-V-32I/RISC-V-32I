@@ -8,20 +8,14 @@ logic [31:0] next_pc;
 logic [31:0] o_pc_F, o_pc_D, o_pc_E, o_pc_M;
 logic [31:0] inst;
 logic [31:0] o_inst_F, o_instr_D, o_instr_E, o_instr_M;
-logic [6:0] opcode
+logic [6:0] opcode, rd;
 logic reg_we_W, reg_we_;
-logic [31:0] rs1, rs2;
+logic [31:0] rs1, rs2, rs1_D, rs2_D;
+logic [4:0] rs1_addr, rs2_addr, rd_addr;
+logic [31:0] 
 logic [31:0]
 logic [31:0]
 logic [31:0]
-logic [31:0]
-logic [31:0]
-
-// a definir
-    .i_rd (rd),
-    .i_rd_addr (rd_addr),
-    .i_rs1_addr (rs1_addr),
-    .i_rs2_addr (rs2_addr),
 
 pc pc (
     .clk (clk),
@@ -70,7 +64,7 @@ pc_buffer pc_buffer_memory (
 
 inst_mem inst_mem(
     .clk (clk),
-    .addr(pc_out),
+    .addr(pc_out[11:2]),
     .data(inst)
 );
 
@@ -114,6 +108,20 @@ register_file register_file(
     .o_rs2 (rs2),
 )
 
+rs_buffer rs1_buffer_decode(
+    .clk (clk),
+    .rst (rst),
+    .i_rs (rs1),
+    .o_rs (rs1_D)
+)
+
+rs_buffer rs2_buffer_decode(
+    .clk (clk),
+    .rst (rst),
+    .i_rs (rs2),
+    .o_rs (rs2_D)
+)
+
 controller controller(
     .i_inst (),
     .o_opcode (opcode),
@@ -130,5 +138,7 @@ controller controller(
     .o_rs2_addr (),
     .o_rd_addr ()
 )
+
+
 
 endmodule
