@@ -194,7 +194,7 @@ wd_buffer wd_buffer_execute(
 data_mem data_mem(
     .i_clk (clk),
     .i_we (wr_en_M),
-    .i_func3 (), // A COMPLETER
+    .i_func3 (funct_3_M),
     .i_data (rs2_E),
     .i_addr (o_alu_E[11:0]),
     .o_data (o_data) 
@@ -270,7 +270,7 @@ controller_buffer_ex controller_buffer_ex (
     .o_reg_write(reg_we_M),    
     .o_funct_3(funct_3_M),
     .o_rd_addr(rd_addr_M) 
-    );
+);
 
 controller_buffer_mem controller_buffer_mem (
     .clk(clk),
