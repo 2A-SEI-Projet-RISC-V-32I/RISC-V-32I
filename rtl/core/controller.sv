@@ -1,6 +1,6 @@
 `include "definitions.vh"
 
-module decoder (    
+module controller (    
     // INPUT
     input wire [`INST_WIDTH-1:0] i_inst,
     // OUTPUT

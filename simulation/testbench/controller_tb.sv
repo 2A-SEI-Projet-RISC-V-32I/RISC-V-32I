@@ -7,7 +7,7 @@
             $finish; \
         end
 
-module decoder_tb;
+module controller_tb;
 
   reg clk;
   reg [`INST_WIDTH-1:0] inst = 32'h00000000;
@@ -25,7 +25,7 @@ module decoder_tb;
   wire [$clog2(`NUM_REGISTER) - 1: 0] rs2_addr;
   wire [$clog2(`NUM_REGISTER) - 1: 0] rd_addr;
 
-  decoder dut (
+  controller dut (
     .i_inst(inst),
     .o_opcode(opcode),
     .o_branch(branch),
@@ -206,7 +206,7 @@ module decoder_tb;
   end 
   
   initial begin
-    $dumpfile("decoder.vcd");
+    $dumpfile("controller.vcd");
     $dumpvars;  
   end
 
