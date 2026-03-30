@@ -2,7 +2,7 @@ import definitions::*;
 
 `define INST_WIDTH 32
 
-module sign_extension (
+module sign_ext (
     input wire [INST_WIDTH-1:0]    i_inst,
     input wire [OPCODE-1:0]        i_opcode,
     output reg [INST_WIDTH-1:0]    o_immediate_extended

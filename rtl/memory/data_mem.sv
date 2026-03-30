@@ -1,6 +1,6 @@
 import definitions::*;
 
-module data_memory #(
+module data_mem #(
     parameter MEM_SIZE = 4096 
 ) (
     input wire i_clk,
@@ -14,11 +14,11 @@ module data_memory #(
     reg [7:0] memory [0:MEM_SIZE-1];
     integer i;
 
-    initial begin
+    /*initial begin
         for (i = 0; i < MEM_SIZE; i = i + 1) begin
             memory[i] = 8'h00;
         end
-    end
+    end*/
 
     always_ff @(posedge i_clk) begin
         if (i_we) begin
