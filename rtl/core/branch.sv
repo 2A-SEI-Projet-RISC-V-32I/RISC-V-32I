@@ -1,6 +1,6 @@
 import definitions::*;
 
-module branch_unit (
+module branch (
     // INPUT
     input wire i_branch,
     input wire [2:0] i_branch_op,

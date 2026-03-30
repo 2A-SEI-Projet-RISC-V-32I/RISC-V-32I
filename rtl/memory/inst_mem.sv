@@ -1,6 +1,6 @@
 import definitions::*;
 
-module instruction_memory #(
+module inst_mem #(
     parameter MEM_SIZE = 1024 
 ) (
     
@@ -23,15 +23,15 @@ module instruction_memory #(
 
     // Pour le top_tb (à commenter ou non en fonction)
 
-        $readmemh("programs/bin/simple.hex", mem);
+        //$readmemh("programs/bin/simple.hex", mem);
 
     // Pour le inst_mem_tb (à commenter ou non en fonction)
 
-    //  mem[0] = 32'h00108113;
-    //  mem[1] = 32'h00108193;
-    //  mem[2] = 32'h00310233;
-    //  mem[3] = 32'hfe218ae3;
-    //  mem[4] = 32'h00000000;
+    mem[0] = 32'h00a00293;
+    mem[1] = 32'h01400313;
+    mem[2] = 32'h006283b3;
+    mem[3] = 32'h40530433;
+
     end
 
     always_comb begin

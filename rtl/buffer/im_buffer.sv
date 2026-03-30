@@ -1,4 +1,4 @@
-module im__buffer(
+module im_buffer(
     input logic clk,
     input logic rst,
     input logic [31:0] i_instr,

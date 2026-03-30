@@ -1,4 +1,4 @@
-module pc__buffer(
+module pc_buffer(
     input logic clk,
     input logic rst,
     input logic [31:0] i_pc,

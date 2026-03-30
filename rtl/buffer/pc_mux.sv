@@ -1,4 +1,4 @@
-module mux_pc (
+module pc_mux (
     input logic [31:0] i_alu_out,
     input logic [31:0] i_pc_out,
     input logic br_true,
