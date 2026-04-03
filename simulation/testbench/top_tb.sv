@@ -4,8 +4,8 @@ module top_tb;
 
     wire wr_en_M;
     wire [2:0] funct_3_M;
-    wire [31:0] rs2_E;
-    wire [31:0] o_alu_E;
+    wire [31:0] rs2_M;
+    wire [31:0] o_alu_M;
     wire [31:0] o_data;
     wire [31:0] o_pc;
     wire [31:0] inst;
@@ -15,8 +15,8 @@ module top_tb;
         .rst(rst),
         .wr_en_M (wr_en_M),
     	.funct_3_M (funct_3_M),
-    	.rs2_E (rs2_E),
-    	.o_alu_E_top (o_alu_E),
+    	.rs2_E (rs2_M),
+    	.o_alu_E_top (o_alu_M),
     	.i_data_mem (o_data),
     	.o_pc_top (o_pc),
     	.i_inst_mem (inst)
@@ -26,8 +26,8 @@ module top_tb;
 	.i_clk (clk),
     	.i_we (wr_en_M),
     	.i_func3 (funct_3_M),
-    	.i_data (rs2_E),
-    	.i_addr (o_alu_E[11:0]),
+    	.i_data (rs2_M),
+    	.i_addr (o_alu_M[11:0]),
     	.o_data (o_data)
     );
 

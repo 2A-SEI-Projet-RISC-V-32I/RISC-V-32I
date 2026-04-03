@@ -24,7 +24,7 @@ wire [FUNCT_7-1:0] funct_7 = i_inst[INST_WIDTH-1:INST_WIDTH-FUNCT_7];
 wire [2:0] funct_3 = i_inst[14:12];
 
 assign o_opcode = opcode;
-assign o_rd_addr = i_inst[11:7];
+//assign o_rd_addr = i_inst[11:7];
     //LUI is (rd <= imm20 << 12), which is the same as (rd <= x0 + imm20 << 12)
 assign o_rs1_addr = OP_LUI == opcode ? 5'b00000 : i_inst[19:15];
 assign o_rs2_addr = i_inst[24:20];
