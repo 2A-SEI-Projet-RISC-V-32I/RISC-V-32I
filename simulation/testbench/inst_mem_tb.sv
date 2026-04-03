@@ -15,7 +15,7 @@ module inst_mem_tb;
   reg [$clog2(MEM_SIZE)-1:0] addr = 32'h00000000;
   wire [INST_WIDTH-1:0] inst;
 
-  instruction_memory dut (
+  inst_mem dut (
     .addr(addr),
     .inst(inst)
   );
