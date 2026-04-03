@@ -75,7 +75,7 @@ pc_buffer pc_buffer_MW(
 );
 
 pc_mux pc_mux(
-    .i_alu_out (o_alu_E),
+    .i_alu_out (o_alu_M),
     .i_pc_out (o_pc),
     .br_true (o_branch),
     .o_data (next_pc)

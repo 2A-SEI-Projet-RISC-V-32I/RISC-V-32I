@@ -18,12 +18,12 @@ module inst_mem #(
 
     initial begin
         for (i = 0; i < MEM_SIZE; i = i + 1) begin
-            mem[i] = 32'h00000000;
+             mem[i] = 32'h00000000;
         end
 
     // Pour le top_tb (à commenter ou non en fonction)
 
-    $readmemh("programs/bin/inst.hex", mem);
+    $readmemh("../../programs/bin/inst.hex", mem);
 
     // Pour le inst_mem_tb (à commenter ou non en fonction)
 
