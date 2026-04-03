@@ -23,7 +23,7 @@ module controller_buffer_dec (
     output logic o_alu_src_b, 
     output logic o_reg_write,    
     output logic [5:0] o_alu_op,
-    output logic [2:0] o_funct_3,
+    output logic [2:0] o_funct_3
     //output logic [$clog2(NUM_REGISTER) - 1: 0] o_rd_addr    
 );
 

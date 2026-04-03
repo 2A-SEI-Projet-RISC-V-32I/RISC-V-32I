@@ -15,7 +15,7 @@ module top_tb;
         .rst(rst),
         .wr_en_M (wr_en_M),
     	.funct_3_M (funct_3_M),
-    	.rs2_E (rs2_M),
+    	.rs2_M (rs2_M),
     	.o_alu_E_top (o_alu_M),
     	.i_data_mem (o_data),
     	.o_pc_top (o_pc),

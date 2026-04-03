@@ -13,7 +13,7 @@ module controller_buffer_ex (
     output logic [1:0] o_result_mux,
     output logic o_mem_write,
     output logic o_reg_write,    
-    output logic [2:0] o_funct_3,
+    output logic [2:0] o_funct_3
     //output logic [$clog2(NUM_REGISTER) - 1: 0] o_rd_addr    
 );
 

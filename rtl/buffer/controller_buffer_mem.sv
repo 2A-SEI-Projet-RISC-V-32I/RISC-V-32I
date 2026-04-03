@@ -9,7 +9,7 @@ module controller_buffer_mem (
     //input wire [$clog2(NUM_REGISTER) - 1: 0] i_rd_addr,
     
     output logic [1:0] o_result_mux,
-    output logic o_reg_write,    
+    output logic o_reg_write    
     //output logic [$clog2(NUM_REGISTER) - 1: 0] o_rd_addr    
 );
 

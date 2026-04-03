@@ -5,7 +5,7 @@ module processor (
     //data mem
     output logic wr_en_M,
     output logic [2:0] funct_3_M,
-    output logic [31:0] rs2_E,
+    output logic [31:0] rs2_M,
     output logic [31:0] o_alu_E_top,
     input logic [31:0] i_data_mem,
 
@@ -19,7 +19,7 @@ logic [31:0] next_pc;
 logic [31:0] o_pc_W, o_pc_D, o_pc_E, o_pc_M;
 logic [31:0] o_inst_W, o_inst_D, o_inst_E, o_inst_M;
 logic [6:0] opcode;
-logic [31:0] rs1, rs2, rs1_E, rs2_E, rs2_M;
+logic [31:0] rs1, rs2, rs1_E, rs2_E;
 logic [4:0] rs1_addr, rs2_addr, rd_addr, rd_addr_D, rd_addr_E, rd_addr_M;
 logic [31:0] o_sign_ext, o_sign_ext_E;
 logic [5:0] alu_op_E, alu_op_D;
@@ -37,7 +37,7 @@ logic [31:0] o_mux_alu_A, o_mux_alu_B;
 logic [4:0]  wb_rd_addr;
 
 assign o_pc_top    = o_pc;
-assign o_alu_E_top = o_alu_E;
+assign o_alu_E_top = o_alu_M;
 
 pc pc(
     .clk (clk),
@@ -227,7 +227,7 @@ controller controller (
     .o_alu_op(alu_op_D),
     .o_funct_3(funct_3_D),
     .o_rs1_addr(rs1_addr),
-    .o_rs2_addr(rs2_addr),
+    .o_rs2_addr(rs2_addr)
     //.o_rd_addr(rd_addr_D)
 );
 
@@ -252,7 +252,7 @@ controller_buffer_dec controller_buffer_DE (
     .o_alu_src_b(sel_B_E), 
     .o_reg_write(reg_we_E),    
     .o_alu_op(alu_op_E),
-    .o_funct_3(funct_3_E),
+    .o_funct_3(funct_3_E)
     //.o_rd_addr(rd_addr_E)    
 );
 
@@ -267,7 +267,7 @@ controller_buffer_ex controller_buffer_EM (
     .o_result_mux(wb_sel_M),
     .o_mem_write(wr_en_M),
     .o_reg_write(reg_we_M),    
-    .o_funct_3(funct_3_M),
+    .o_funct_3(funct_3_M)
     //.o_rd_addr(rd_addr_M) 
 );
 
@@ -275,10 +275,10 @@ controller_buffer_mem controller_buffer_MW (
     .clk(clk),
     .rst(rst),
     .i_result_mux(wb_sel_M),
-    //.i_reg_write(reg_we_M),    
-    .i_rd_addr(rd_addr_M),
+    .i_reg_write(reg_we_M),    
+    //.i_rd_addr(rd_addr_M),
     .o_result_mux(wb_sel_W),
-    .o_reg_write(reg_we_W),    
+    .o_reg_write(reg_we_W)    
     //.o_rd_addr(wb_rd_addr)    
 );
 
