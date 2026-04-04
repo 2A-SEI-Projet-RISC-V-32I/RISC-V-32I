@@ -24,7 +24,7 @@ logic [4:0] rs1_addr, rs2_addr, rd_addr, rd_addr_D, rd_addr_E, rd_addr_M;
 logic [31:0] o_sign_ext, o_sign_ext_E;
 logic [5:0] alu_op_E, alu_op_D;
 logic [31:0] o_alu, o_alu_W, o_alu_M;
-logic [31:0] o_data_M;
+logic [31:0] o_data_W;
 logic [1:0] wb_sel_W, wb_sel_E, wb_sel_M, wb_sel_D;
 logic [31:0] o_wb;
 logic sel_B_E, sel_A_E, sel_A_D, sel_B_D;
@@ -75,7 +75,7 @@ pc_buffer pc_buffer_MW(
 );
 
 pc_mux pc_mux(
-    .i_alu_out (o_alu_E),
+    .i_alu_out (o_alu_M),
     .i_pc_out (o_pc),
     .br_true (o_branch),
     .o_data (next_pc)
