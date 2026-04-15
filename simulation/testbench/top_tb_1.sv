@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-module tb_gr_1;
+module top_tb_1;
 
     // ==========================================
     // MACRO D'ASSERTION
@@ -17,38 +17,68 @@ module tb_gr_1;
         end
 
     // ==========================================
-    // SIGNAUX ET INSTANCIATION
+    // SIGNAUX
     // ==========================================
     reg clk;
     reg rst;
 
-    // Instanciation de ton processeur
-    top dut (
+    wire wr_en_M;
+    wire [2:0] funct_3_M;
+    wire [31:0] rs2_M;
+    wire [31:0] o_alu_M;
+    wire [31:0] o_data;
+    wire [31:0] o_pc;
+    wire [31:0] inst;
+
+    // ==========================================
+    // INSTANCIATIONS
+    // ==========================================
+    processor dut (
         .clk(clk),
-        .rst(rst)
+        .rst(rst),
+        .wr_en_M (wr_en_M),
+        .funct_3_M (funct_3_M),
+        .rs2_M (rs2_M),
+        .o_alu_E_top (o_alu_M),
+        .i_data_mem (o_data),
+        .o_pc_top (o_pc),
+        .i_inst_mem (inst)
     );
 
-    // Génération de l'horloge (Période = 10ns)
+    data_mem data_mem(
+        .i_clk (clk),
+        .i_we (wr_en_M),
+        .i_func3 (funct_3_M),
+        .i_data (rs2_M),
+        .i_addr (o_alu_M[11:0]),
+        .o_data (o_data)
+    );
+
+    inst_mem inst_mem(
+        .clk (clk),
+        .addr (o_pc[11:2]),
+        .inst (inst)
+    );
+
+    // ==========================================
+    // HORLOGE
+    // ==========================================
     always #5 clk = ~clk;
 
     // ==========================================
     // SCENARIO DE TEST
     // ==========================================
     initial begin
-        // 1. Initialisation
+
+        // Initialisation et Reset
         clk = 0;
         rst = 1;
         
-        // Optionnel : On charge le programme spécifique à ce groupe
-        // $readmemh("programs/bin/inst_gr_1.hex", dut.inst_mem_inst.mem);
-
-        // 2. On lâche le reset
         #20 rst = 0;
 
-        // 3. On attend assez de cycles pour que toutes les instructions
-        // traversent les 5 étages du pipeline.
-        // On a ~13 instructions (avec les NOPs), on attend donc ~200ns
-      #300;
+        // Attente de l'exécution du programme
+        // ~13 instructions * 10ns + marge = 250ns
+        #300; 
 
         // ==========================================
         // VÉRIFICATION AUTOMATIQUE (Backdoor Access)
@@ -56,6 +86,8 @@ module tb_gr_1;
         $display("--- DEBUT DES VERIFICATIONS (GROUPE 1) ---");
 
         // Verif ADDI
+        // ATTENTION : J'ai mis "register_file_inst". Si ton instance dans processor.sv
+        // s'appelle juste "register_file" ou "rf", modifie le nom ci-dessous !
         `ASSERT_EQ("Test ADDI (x5 = 10)", dut.register_file.registers[5], 32'd10)
         `ASSERT_EQ("Test ADDI (x6 = 20)", dut.register_file.registers[6], 32'd20)
 
@@ -65,16 +97,16 @@ module tb_gr_1;
         // Verif SUB
         `ASSERT_EQ("Test SUB (x8 = 10)", dut.register_file.registers[8], 32'd10)
 
-        // Si on arrive ici, c'est qu'aucun $finish n'a été déclenché par une erreur
+        // Si tout est bon
         $display("========================================");
         $display("SUCCES : Tous les tests du Groupe 1 sont passes !");
         $display("========================================");
         
         $finish;
     end
-
+      
     // ==========================================
-    // GESTION DES COURBES (Au cas où on doit débugger)
+    // DUMP DES COURBES (Optionnel)
     // ==========================================
     initial begin
         $dumpfile("tb_gr_1.vcd");
