@@ -23,7 +23,7 @@ module inst_mem #(
 
     // Pour le top_tb (à commenter ou non en fonction)
 
-    $readmemh("programs/bin/inst_gr_1.hex", mem);
+    $readmemh("programs/bin/fibonacci.hex", mem);
 
     // Pour le inst_mem_tb (à commenter ou non en fonction)
 

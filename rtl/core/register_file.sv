@@ -16,8 +16,14 @@ module register_file (
 
 logic [DATA_WIDTH-1:0] registers[0:NUM_REGISTER-1];
 
-assign o_rs1 = (i_rs1_addr == 0) ? 32'b0 : registers[i_rs1_addr];
-assign o_rs2 = (i_rs2_addr == 0) ? 32'b0 : registers[i_rs2_addr];
+//assign o_rs1 = (i_rs1_addr == 0) ? 32'b0 : registers[i_rs1_addr];
+//assign o_rs2 = (i_rs2_addr == 0) ? 32'b0 : registers[i_rs2_addr];
+assign o_rs1 = (i_rs1_addr == 0) ? 32'b0 : 
+	(i_we && (i_rd_addr == i_rs1_addr)) ? i_rd : 
+	registers[i_rs1_addr]; 
+assign o_rs2 = (i_rs2_addr == 0) ? 32'b0 : 
+	(i_we && (i_rd_addr == i_rs2_addr)) ? i_rd : 
+	registers[i_rs2_addr];  
 
 always_ff @( posedge i_clk ) begin
         if (i_rst) begin

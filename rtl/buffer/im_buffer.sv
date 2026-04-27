@@ -1,6 +1,8 @@
 module im_buffer(
     input logic clk,
     input logic rst,
+    input logic i_en,
+    input logic i_clr,
     input logic [31:0] i_instr,
     output logic [31:0] o_instr
 );
@@ -8,8 +10,12 @@ module im_buffer(
 always_ff @(posedge clk or posedge rst) begin
     if (rst) begin
       o_instr <= 32'b0;
-    end else begin
-      o_instr <= i_instr;
+    end else begin 
+        if (i_clr) begin
+            o_instr <= 32'b0;
+        end else if (i_en) begin 
+            o_instr <= i_instr;
+        end
     end
 end
 

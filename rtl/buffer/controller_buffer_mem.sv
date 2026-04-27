@@ -16,13 +16,12 @@ module controller_buffer_mem (
 always_ff @(posedge clk or posedge rst) begin
     if (rst) begin
         o_result_mux <= '0;
-        o_reg_write  <= 1'b0;
-        //o_rd_addr    <= '0;
-    end 
-    else begin
+        o_reg_write <= 1'b0;
+        //o_rd_addr <= '0;
+    end else begin
         o_result_mux <= i_result_mux;
-        o_reg_write  <= i_reg_write;
-        //o_rd_addr    <= i_rd_addr;
+        o_reg_write <= i_reg_write;
+        //o_rd_addr <= i_rd_addr;
     end
 end
 

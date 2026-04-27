@@ -1,6 +1,8 @@
 module pc_buffer(
     input logic clk,
     input logic rst,
+    input logic i_en,
+    input logic i_clr,
     input logic [31:0] i_pc,
     output logic [31:0] o_pc
 );
@@ -8,8 +10,12 @@ module pc_buffer(
 always_ff @(posedge clk or posedge rst) begin
     if (rst) begin
       o_pc <= 32'b0;
-    end else begin
-      o_pc <= i_pc;
+    end else begin 
+        if (i_clr) begin
+            o_pc <= 32'b0;
+        end else if (i_en) begin 
+            o_pc <= i_pc;
+        end
     end
 end
 
