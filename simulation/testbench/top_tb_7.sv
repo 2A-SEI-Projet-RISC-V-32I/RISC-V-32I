@@ -1,4 +1,4 @@
-module top_tb_1;
+module top_tb_7;
 
     `define ASSERT_EQ(name, signal, expected) \
         if ((signal) !== (expected)) begin \
@@ -52,10 +52,9 @@ module top_tb_1;
 
     always #5 clk = ~clk;
 
-
     initial begin
 
-        $readmemh("programs/bin/inst_gr_1.hex", inst_mem.mem);
+        $readmemh("programs/bin/inst_gr_7.hex", inst_mem.mem);
 
         clk = 0;
         rst = 1;
@@ -64,30 +63,31 @@ module top_tb_1;
 
         #300; 
 
-        $display("GROUPE 1");
 
-        // Verif ADDI
-  
-        `ASSERT_EQ("Test ADDI (x5 = 10)", dut.register_file.registers[5], 32'd10)
-        `ASSERT_EQ("Test ADDI (x6 = 20)", dut.register_file.registers[6], 32'd20)
+        $display("GROUPE 7");
 
-        // Verif ADD
-        `ASSERT_EQ("Test ADD (x7 = 30)", dut.register_file.registers[7], 32'd30)
+        // ALU-ALU
+        `ASSERT_EQ("Test Init x1", dut.register_file.registers[1], 32'd15)
+        `ASSERT_EQ("Test Init x2", dut.register_file.registers[2], 32'd25)
+        `ASSERT_EQ("Test Forward ADD (x3 = 40)", dut.register_file.registers[3], 32'd40)
+        `ASSERT_EQ("Test Forward SUB (x4 = 25)", dut.register_file.registers[4], 32'd25)
 
-        // Verif SUB
-        `ASSERT_EQ("Test SUB (x8 = 10)", dut.register_file.registers[8], 32'd10)
+        // ALU-Memory
+        // Si x7 vaut 99, cela prouve que le Store a bien recu l'adresse 8 (via x5)
+        // et la donnee 99 (via x6) directement depuis l'ALU sans attendre !
+        `ASSERT_EQ("Test Forward STORE (Lu via LW dans x7)", dut.register_file.registers[7], 32'd99)
 
         // Si tout est bon
         $display("");
-        $display("SUCCES : Groupe 1");
+        $display("SUCCES : Groupe 7");
         $display("");
         
         $finish;
     end
       
     initial begin
-        $dumpfile("top_tb_1.vcd");
-        $dumpvars(0, top_tb_1);  
+        $dumpfile("top_tb_7.vcd");
+        $dumpvars(0, top_tb_7);  
     end
 
 endmodule

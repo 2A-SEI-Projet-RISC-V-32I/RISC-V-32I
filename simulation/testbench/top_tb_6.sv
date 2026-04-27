@@ -1,4 +1,4 @@
-module top_tb_1;
+module top_tb_6;
 
     `define ASSERT_EQ(name, signal, expected) \
         if ((signal) !== (expected)) begin \
@@ -50,44 +50,53 @@ module top_tb_1;
         .inst (inst)
     );
 
+
     always #5 clk = ~clk;
 
 
     initial begin
 
-        $readmemh("programs/bin/inst_gr_1.hex", inst_mem.mem);
+        $readmemh("programs/bin/inst_gr_6.hex", inst_mem.mem);
 
         clk = 0;
         rst = 1;
         
         #20 rst = 0;
 
-        #300; 
+        #400; 
 
-        $display("GROUPE 1");
 
-        // Verif ADDI
-  
-        `ASSERT_EQ("Test ADDI (x5 = 10)", dut.register_file.registers[5], 32'd10)
-        `ASSERT_EQ("Test ADDI (x6 = 20)", dut.register_file.registers[6], 32'd20)
+        $display("GROUPE 6");
 
-        // Verif ADD
-        `ASSERT_EQ("Test ADD (x7 = 30)", dut.register_file.registers[7], 32'd30)
+        // LUI (Doit valoir 0x12345000)
+        `ASSERT_EQ("Test LUI (x5)", dut.register_file.registers[5], 32'h12345000)
 
-        // Verif SUB
-        `ASSERT_EQ("Test SUB (x8 = 10)", dut.register_file.registers[8], 32'd10)
+        // AUIPC (Doit valoir 0x2000 + 0x10 = 0x2010)
+        `ASSERT_EQ("Test AUIPC (x6)", dut.register_file.registers[6], 32'h00002010)
+
+        // JAL (Link et Saut)
+        // L'adresse de retour sauvegardée dans x7 doit être 36 (0x24)
+        `ASSERT_EQ("Test JAL [Link] (x7 = PC+4)", dut.register_file.registers[7], 32'h00000024)
+        // Si x8 vaut 1, on a bien esquivé le piège pour atterrir sur la bonne instruction
+        `ASSERT_EQ("Test JAL [Jump] (x8 = 1)", dut.register_file.registers[8], 32'd1)
+
+        // JALR (Link et Saut Absolu)
+        // L'adresse de retour sauvegardée dans x10 doit être 84 (0x54)
+        `ASSERT_EQ("Test JALR [Link] (x10 = PC+4)", dut.register_file.registers[10], 32'h00000054)
+        // Si x11 vaut 1, le processeur a bien suivi l'adresse contenue dans x9
+        `ASSERT_EQ("Test JALR [Jump] (x11 = 1)", dut.register_file.registers[11], 32'd1)
 
         // Si tout est bon
         $display("");
-        $display("SUCCES : Groupe 1");
+        $display("SUCCES : Groupe 6");
         $display("");
         
         $finish;
     end
       
     initial begin
-        $dumpfile("top_tb_1.vcd");
-        $dumpvars(0, top_tb_1);  
+        $dumpfile("top_tb_6.vcd");
+        $dumpvars(0, top_tb_6);  
     end
 
 endmodule

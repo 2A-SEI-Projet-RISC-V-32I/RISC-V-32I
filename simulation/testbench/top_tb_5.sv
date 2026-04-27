@@ -1,4 +1,4 @@
-module top_tb_1;
+module top_tb_5;
 
     `define ASSERT_EQ(name, signal, expected) \
         if ((signal) !== (expected)) begin \
@@ -50,44 +50,46 @@ module top_tb_1;
         .inst (inst)
     );
 
+
     always #5 clk = ~clk;
 
 
     initial begin
 
-        $readmemh("programs/bin/inst_gr_1.hex", inst_mem.mem);
+        $readmemh("programs/bin/inst_gr_5.hex", inst_mem.mem);
 
         clk = 0;
         rst = 1;
         
         #20 rst = 0;
 
-        #300; 
+        #400; 
 
-        $display("GROUPE 1");
 
-        // Verif ADDI
-  
-        `ASSERT_EQ("Test ADDI (x5 = 10)", dut.register_file.registers[5], 32'd10)
-        `ASSERT_EQ("Test ADDI (x6 = 20)", dut.register_file.registers[6], 32'd20)
+        $display("GROUPE 5");
 
-        // Verif ADD
-        `ASSERT_EQ("Test ADD (x7 = 30)", dut.register_file.registers[7], 32'd30)
+        // BEQ
+        // Si x5 == 99, c'est que le BEQ n'a pas sauté.
+        // Si x5 == 1, le BEQ a sauté à l'adresse exacte !
+        `ASSERT_EQ("Test BEQ : x5 doit valoir 1", dut.register_file.registers[5], 32'd1)
 
-        // Verif SUB
-        `ASSERT_EQ("Test SUB (x8 = 10)", dut.register_file.registers[8], 32'd10)
+        // BLT
+        `ASSERT_EQ("Test BLT : x6 doit valoir 1", dut.register_file.registers[6], 32'd1)
+
+        // BGEU
+        `ASSERT_EQ("Test BGEU : x7 doit valoir 1", dut.register_file.registers[7], 32'd1)
 
         // Si tout est bon
         $display("");
-        $display("SUCCES : Groupe 1");
+        $display("SUCCES : Groupe 5");
         $display("");
         
         $finish;
     end
       
     initial begin
-        $dumpfile("top_tb_1.vcd");
-        $dumpvars(0, top_tb_1);  
+        $dumpfile("top_tb_5.vcd");
+        $dumpvars(0, top_tb_5);  
     end
 
 endmodule

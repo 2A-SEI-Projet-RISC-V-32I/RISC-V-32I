@@ -1,4 +1,4 @@
-module top_tb_1;
+module top_tb_2;
 
     `define ASSERT_EQ(name, signal, expected) \
         if ((signal) !== (expected)) begin \
@@ -52,11 +52,10 @@ module top_tb_1;
 
     always #5 clk = ~clk;
 
-
     initial begin
 
-        $readmemh("programs/bin/inst_gr_1.hex", inst_mem.mem);
-
+        $readmemh("programs/bin/inst_gr_2.hex", inst_mem.mem);
+        
         clk = 0;
         rst = 1;
         
@@ -64,30 +63,36 @@ module top_tb_1;
 
         #300; 
 
-        $display("GROUPE 1");
+        $display("GROUPE 2");
 
-        // Verif ADDI
-  
-        `ASSERT_EQ("Test ADDI (x5 = 10)", dut.register_file.registers[5], 32'd10)
-        `ASSERT_EQ("Test ADDI (x6 = 20)", dut.register_file.registers[6], 32'd20)
+        // Verif de l'initialisation (ADDI)
+        `ASSERT_EQ("Init x5", dut.register_file.registers[5], 32'd10)
+        `ASSERT_EQ("Init x6", dut.register_file.registers[6], 32'd12)
+        `ASSERT_EQ("Init x8", dut.register_file.registers[8], 32'd2)
+        // -16 en Hexa sur 32 bits = FFFFFFF0
+        `ASSERT_EQ("Init x10 (-16)", dut.register_file.registers[10], 32'hFFFFFFF0)
 
-        // Verif ADD
-        `ASSERT_EQ("Test ADD (x7 = 30)", dut.register_file.registers[7], 32'd30)
+        // Verif AND
+        `ASSERT_EQ("Test AND (x7 = 8)", dut.register_file.registers[7], 32'd8)
 
-        // Verif SUB
-        `ASSERT_EQ("Test SUB (x8 = 10)", dut.register_file.registers[8], 32'd10)
+        // Verif SLL (Shift Left Logical)
+        `ASSERT_EQ("Test SLL (x9 = 40)", dut.register_file.registers[9], 32'd40)
+
+        // Verif SRAI (Shift Right Arithmetic Immediate)
+        // -4 en Hexa sur 32 bits = FFFFFFFC
+        `ASSERT_EQ("Test SRAI (x11 = -4)", dut.register_file.registers[11], 32'hFFFFFFFC)
 
         // Si tout est bon
         $display("");
-        $display("SUCCES : Groupe 1");
+        $display("SUCCES : Groupe 2");
         $display("");
         
         $finish;
     end
       
     initial begin
-        $dumpfile("top_tb_1.vcd");
-        $dumpvars(0, top_tb_1);  
+        $dumpfile("top_tb_2.vcd");
+        $dumpvars(0, top_tb_2);  
     end
 
 endmodule

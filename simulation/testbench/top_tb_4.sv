@@ -1,4 +1,4 @@
-module top_tb_1;
+module top_tb_4;
 
     `define ASSERT_EQ(name, signal, expected) \
         if ((signal) !== (expected)) begin \
@@ -50,44 +50,46 @@ module top_tb_1;
         .inst (inst)
     );
 
+
     always #5 clk = ~clk;
 
 
     initial begin
 
-        $readmemh("programs/bin/inst_gr_1.hex", inst_mem.mem);
+        $readmemh("programs/bin/inst_gr_4.hex", inst_mem.mem);
 
         clk = 0;
         rst = 1;
         
         #20 rst = 0;
 
-        #300; 
+        #450; 
 
-        $display("GROUPE 1");
 
-        // Verif ADDI
-  
-        `ASSERT_EQ("Test ADDI (x5 = 10)", dut.register_file.registers[5], 32'd10)
-        `ASSERT_EQ("Test ADDI (x6 = 20)", dut.register_file.registers[6], 32'd20)
+        $display("GROUPE 4");
 
-        // Verif ADD
-        `ASSERT_EQ("Test ADD (x7 = 30)", dut.register_file.registers[7], 32'd30)
+        // SW / LW
+        `ASSERT_EQ("Test LW (x3 = -500)", dut.register_file.registers[3], 32'hFFFFFE0C)
 
-        // Verif SUB
-        `ASSERT_EQ("Test SUB (x8 = 10)", dut.register_file.registers[8], 32'd10)
+        // SH / LH / LHU
+        `ASSERT_EQ("Test LH Signe (x5 = -2)", dut.register_file.registers[5], 32'hFFFFFFFE)
+        `ASSERT_EQ("Test LHU Non-Signe (x6 = 65534)", dut.register_file.registers[6], 32'h0000FFFE)
+
+        // SB / LB / LBU
+        `ASSERT_EQ("Test LB Signe (x8 = -5)", dut.register_file.registers[8], 32'hFFFFFFFB)
+        `ASSERT_EQ("Test LBU Non-Signe (x9 = 251)", dut.register_file.registers[9], 32'h000000FB)
 
         // Si tout est bon
         $display("");
-        $display("SUCCES : Groupe 1");
+        $display("SUCCES : Groupe 4 ");
         $display("");
         
         $finish;
     end
       
     initial begin
-        $dumpfile("top_tb_1.vcd");
-        $dumpvars(0, top_tb_1);  
+        $dumpfile("top_tb_4.vcd");
+        $dumpvars(0, top_tb_4);  
     end
 
 endmodule

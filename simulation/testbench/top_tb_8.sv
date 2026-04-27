@@ -1,4 +1,4 @@
-module top_tb_1;
+module top_tb_8;
 
     `define ASSERT_EQ(name, signal, expected) \
         if ((signal) !== (expected)) begin \
@@ -50,44 +50,49 @@ module top_tb_1;
         .inst (inst)
     );
 
+
     always #5 clk = ~clk;
 
 
     initial begin
 
-        $readmemh("programs/bin/inst_gr_1.hex", inst_mem.mem);
+        $readmemh("programs/bin/inst_gr_8.hex", inst_mem.mem);
 
         clk = 0;
         rst = 1;
         
         #20 rst = 0;
 
-        #300; 
 
-        $display("GROUPE 1");
+        #350; 
 
-        // Verif ADDI
-  
-        `ASSERT_EQ("Test ADDI (x5 = 10)", dut.register_file.registers[5], 32'd10)
-        `ASSERT_EQ("Test ADDI (x6 = 20)", dut.register_file.registers[6], 32'd20)
 
-        // Verif ADD
-        `ASSERT_EQ("Test ADD (x7 = 30)", dut.register_file.registers[7], 32'd30)
+        $display("--- DEBUT DES VERIFICATIONS (GROUPE 8 - HAZARD UNIT) ---");
 
-        // Verif SUB
-        `ASSERT_EQ("Test SUB (x8 = 10)", dut.register_file.registers[8], 32'd10)
+        // LOAD-USE STALL
+        // Si x4 vaut 84, c'est que le processeur s'est bien mis en pause 1 cycle pour attendre le LW.
+        // S'il vaut 42, c'est que le STALL a échoué et qu'il a lu l'ancienne valeur de x3 (0).
+        `ASSERT_EQ("Test Stall Load-Use (x4 = 84)", dut.register_file.registers[4], 32'd84)
+
+        // CONTROL HAZARD (BEQ)
+        // Si x5 vaut 99, c'est que le FLUSH n'a pas marché.
+        `ASSERT_EQ("Test Flush BEQ (x5 = 1)", dut.register_file.registers[5], 32'd1)
+
+        // CONTROL HAZARD (JAL)
+        // Si x7 vaut 99, c'est que le FLUSH n'a pas marché.
+        `ASSERT_EQ("Test Flush JAL (x7 = 1)", dut.register_file.registers[7], 32'd1)
 
         // Si tout est bon
         $display("");
-        $display("SUCCES : Groupe 1");
+        $display("SUCCES : Groupe 8");
         $display("");
         
         $finish;
     end
       
     initial begin
-        $dumpfile("top_tb_1.vcd");
-        $dumpvars(0, top_tb_1);  
+        $dumpfile("top_tb_8.vcd");
+        $dumpvars(0, top_tb_8);  
     end
 
 endmodule

@@ -1,4 +1,4 @@
-module top_tb_1;
+module top_tb_3;
 
     `define ASSERT_EQ(name, signal, expected) \
         if ((signal) !== (expected)) begin \
@@ -50,44 +50,49 @@ module top_tb_1;
         .inst (inst)
     );
 
+
     always #5 clk = ~clk;
 
 
     initial begin
 
-        $readmemh("programs/bin/inst_gr_1.hex", inst_mem.mem);
+        $readmemh("programs/bin/inst_gr_3.hex", inst_mem.mem);
 
         clk = 0;
         rst = 1;
         
         #20 rst = 0;
 
-        #300; 
+        #350; 
 
-        $display("GROUPE 1");
 
-        // Verif ADDI
-  
-        `ASSERT_EQ("Test ADDI (x5 = 10)", dut.register_file.registers[5], 32'd10)
-        `ASSERT_EQ("Test ADDI (x6 = 20)", dut.register_file.registers[6], 32'd20)
+        $display("GROUPE 3");
 
-        // Verif ADD
-        `ASSERT_EQ("Test ADD (x7 = 30)", dut.register_file.registers[7], 32'd30)
+        // Verif Initialisation
+        `ASSERT_EQ("Init x1 (-5)", dut.register_file.registers[1], 32'hFFFFFFFB)
+        `ASSERT_EQ("Init x2 (3)",  dut.register_file.registers[2], 32'd3)
+        `ASSERT_EQ("Init x3 (-1)", dut.register_file.registers[3], 32'hFFFFFFFF)
 
-        // Verif SUB
-        `ASSERT_EQ("Test SUB (x8 = 10)", dut.register_file.registers[8], 32'd10)
+        // Verif SLT (Signé) -> -5 < 3 est VRAI (1)
+        `ASSERT_EQ("Test SLT Signe (x4 = 1)", dut.register_file.registers[4], 32'd1)
+
+        // Verif SLTIU (Non-Signé Imm) -> 0xFFFFFFFF < 3 est FAUX (0)
+        `ASSERT_EQ("Test SLTIU Non-Signe (x5 = 0)", dut.register_file.registers[5], 32'd0)
+
+        // Verif SLTU (Non-Signé Reg) -> 0xFFFFFFFB < 3 est FAUX (0)
+        `ASSERT_EQ("Test SLTU Non-Signe (x6 = 0)", dut.register_file.registers[6], 32'd0)
 
         // Si tout est bon
         $display("");
-        $display("SUCCES : Groupe 1");
+        $display("SUCCES : Groupe 3");
         $display("");
         
         $finish;
     end
       
     initial begin
-        $dumpfile("top_tb_1.vcd");
-        $dumpvars(0, top_tb_1);  
+        $dumpfile("top_tb_3.vcd");
+        $dumpvars(0, top_tb_3);  
     end
 
 endmodule
