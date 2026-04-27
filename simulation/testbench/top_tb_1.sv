@@ -1,5 +1,3 @@
-`timescale 1ns/1ps
-
 module top_tb_1;
 
     // ==========================================
@@ -109,8 +107,8 @@ module top_tb_1;
     // DUMP DES COURBES (Optionnel)
     // ==========================================
     initial begin
-        $dumpfile("tb_gr_1.vcd");
-        $dumpvars(0, tb_gr_1);  
+        $dumpfile("top_tb_1.vcd");
+        $dumpvars(0, top_tb_1);  
     end
 
 endmodule
