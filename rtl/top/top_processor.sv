@@ -179,8 +179,8 @@ rs_buffer rs2_buffer_DE(
 branch branch_inst(
     .i_branch (branch_E),
     .i_branch_op (branch_type_E),
-    .i_a (rs1_E),
-    .i_b (rs2_E),
+    .i_a (rs1_forward),
+    .i_b (rs2_forward),
     .o_take (o_branch)
 );
 
