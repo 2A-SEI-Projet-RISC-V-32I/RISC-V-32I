@@ -72,7 +72,7 @@ module top_tb_9_pr;
 
         $display("--- DEBUT DES VERIFICATIONS POST-ROUTAGE ---");
 
-        `ASSERT_EQ("Test Ultime Fibonacci (a = 5 à l'index 52)", data_mem.memory[52], 32'd5)
+        `ASSERT_EQ("Test Ultime Fibonacci (a = 5 à l'index 1)", data_mem.memory[1], 32'd5)
 
         $display("");
         $display("STRESS TEST PASSED");
